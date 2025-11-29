@@ -25,8 +25,11 @@ const Layout = () => {
 
       </nav>
 
-      <div className='flex-1 w-full flex h-[calc(100vh-64px)]'>
+      <div className='flex-1 w-full flex h-[calc(100vh-64px)] relative'>
         <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
+        {sidebar && (
+          <div className='fixed inset-0 bg-black/30 z-40 sm:hidden' onClick={()=> setSidebar(false)}></div>
+        )}
 
         <div className='flex-1 bg-[#F4F7FB]'>
           <Outlet />
