@@ -17,7 +17,11 @@ app.use(cors({
 }))
 app.use(express.json())
 
-app.use('/api', clerkMiddleware())
+if (process.env.CLERK_SECRET_KEY) {
+  app.use('/api', clerkMiddleware())
+} else {
+  app.use('/api', (req, res, next) => next())
+}
 
 app.get('/', (req, res) => res.send('Server is Live!'))
 
@@ -39,4 +43,4 @@ if (!process.env.VERCEL) {
   })
 }
 
-export default app
+export default (req, res) => app(req, res)
