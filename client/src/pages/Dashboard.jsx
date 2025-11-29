@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { dummyCreationData } from "../assets/assets";
 import { Gem, Sparkles } from "lucide-react";
-import { useAuth, useUser } from "@clerk/clerk-react";
+import { useAuth, useUser, Protect } from "@clerk/clerk-react";
 import CreationItem from "../components/CreationItem.jsx";
 import axios from 'axios';
 import toast from "react-hot-toast";
@@ -14,7 +13,7 @@ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 const Dashboard = () => {
 
   const [creations, setCreations] = useState([]);
-  const { user, isSignedIn } = useUser();
+  const { isSignedIn } = useUser();
   const [loading, setLoading] = useState(true)
 
   const {getToken} = useAuth()
@@ -60,7 +59,11 @@ const Dashboard = () => {
           <div className="text-slate-600">
             <p className="text-sm">Active Plan</p>
             <h2 className="text-xl font-semibold">
-              {(isSignedIn ? (user?.publicMetadata?.plan ?? "Free") : "Free")}
+              {isSignedIn ? (
+                <Protect plan="premium" fallback="Free">Premium</Protect>
+              ) : (
+                "Free"
+              )}
             </h2>
           </div>
           <div className="w-10 h-10 rounded-lg bg-linear-to-br from-[#FF61C5] to-[#9E53EE] text-white flex justify-center items-center">
